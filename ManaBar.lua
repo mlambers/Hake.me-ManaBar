@@ -1,3 +1,7 @@
+-------------------------------
+--- ManaBar.lua Version 0.3 ---
+-------------------------------
+
 local ManaBar = {
 	OptionEnable = Menu.AddOption({"mlambers", "ManaBar"}, "1. Enable.", "Enable/Disable this script."),
 	OffsetWidth = Menu.AddOption({"mlambers", "ManaBar"}, "2. Width", "", 20, 200, 2),
@@ -33,6 +37,7 @@ function ManaBar.OnMenuOptionChange(option, old, new)
 end
 
 function ManaBar.OnScriptLoad()
+	MyHero = nil
 	gObject, gObjectOrigin = nil, nil
 	w2sX, w2sY = nil, nil
 	oWidth, oHeight, oYPos = nil, nil, nil
@@ -40,10 +45,11 @@ function ManaBar.OnScriptLoad()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.2 ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
+	MyHero = nil
 	gObject, gObjectOrigin = nil, nil
 	w2sX, w2sY = nil, nil
 	oWidth, oHeight, oYPos = nil, nil, nil
@@ -51,7 +57,7 @@ function ManaBar.OnGameEnd()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.2 ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(tempX, tempY)
@@ -67,8 +73,8 @@ function ManaBar.OnDraw()
 	if Engine.IsInGame() == false then return end
 	if GameRules.GetGameState() < 4 then return end
 	
-	if MyHero == nil then
-		MyHero = Heroes.GetLocal() or nil
+	if MyHero == nil then 
+		MyHero = Heroes.GetLocal()
 	end
 
 	if ManaBar.NeedInit == true then
@@ -81,7 +87,7 @@ function ManaBar.OnDraw()
 		RightMost, TopMost = Renderer.GetScreenSize()
 		ManaBar.NeedInit = false
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.2 ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Game started, init script done.")
 	end
 	
 	if MyHero == nil then return end
