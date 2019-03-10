@@ -1,6 +1,6 @@
--------------------------------
---- ManaBar.lua Version 0.3 ---
--------------------------------
+--------------------------------
+--- ManaBar.lua Version 0.3a ---
+--------------------------------
 
 local ManaBar = {
 	OptionEnable = Menu.AddOption({"mlambers", "ManaBar"}, "1. Enable.", "Enable/Disable this script."),
@@ -45,7 +45,7 @@ function ManaBar.OnScriptLoad()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3a ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
@@ -57,7 +57,7 @@ function ManaBar.OnGameEnd()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3a ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(tempX, tempY)
@@ -87,7 +87,7 @@ function ManaBar.OnDraw()
 		RightMost, TopMost = Renderer.GetScreenSize()
 		ManaBar.NeedInit = false
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3 ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3a ] Game started, init script done.")
 	end
 	
 	if MyHero == nil then return end
@@ -127,13 +127,7 @@ function ManaBar.OnDraw()
 					Draw the actual mana bar.
 				--]]
 				Renderer.SetDrawColor(79, 120, 249, 255)
-				Renderer.DrawFilledRect(xBox, yBox, mCeil(oWidth * (NPC.GetMana(gObject) /  NPC.GetMaxMana(gObject))), oHeight)
-				
-				--[[
-					Draw black border.
-				--]]
-				Renderer.SetDrawColor(0, 0, 0, 255)
-				Renderer.DrawOutlineRect(xBox, yBox, oWidth, oHeight)
+				Renderer.DrawFilledRect((1 + xBox), (1 + yBox), mCeil((oWidth - 2) * (NPC.GetMana(gObject) /  NPC.GetMaxMana(gObject))), (oHeight - 2))
 			end
 		end
 	end
