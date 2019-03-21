@@ -1,5 +1,5 @@
 --------------------------------
---- ManaBar.lua Version 0.3b ---
+--- ManaBar.lua Version 0.3c ---
 --------------------------------
 
 local ManaBar = {
@@ -48,7 +48,7 @@ function ManaBar.OnScriptLoad()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3b ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
@@ -60,7 +60,7 @@ function ManaBar.OnGameEnd()
 	TopMost, RightMost = nil, nil
 	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3b ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(tempX, tempY)
@@ -71,16 +71,11 @@ function ManaBar.IsOnScreen(tempX, tempY)
 	return true
 end
 
-function ManaBar.OnDraw()
+function ManaBar.OnUpdate()
 	if Menu.IsEnabled(ManaBar.OptionEnable) == false then return end
-	if Engine.IsInGame() == false then return end
-	if GameRules.GetGameState() < 4 then return end
 	
-	if MyHero == nil then 
+	if MyHero == nil or MyHero ~= Heroes.GetLocal() or ManaBar.NeedInit then 
 		MyHero = Heroes.GetLocal()
-	end
-
-	if ManaBar.NeedInit == true then
 		gObject, gObjectOrigin = nil, nil
 		w2sX, w2sY = nil, nil
 		oWidth = Menu.GetValue(ManaBar.OffsetWidth)
@@ -91,11 +86,23 @@ function ManaBar.OnDraw()
 		RightMost, TopMost = Renderer.GetScreenSize()
 		ManaBar.NeedInit = false
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3b ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Game started, init script done.")
+	end
+end
+
+function ManaBar.OnDraw()
+	if Menu.IsEnabled(ManaBar.OptionEnable) == false then return end
+	
+	if
+		Engine.IsInGame() == false
+		or GameRules.GetGameState() < 4 
+		or GameRules.GetGameState() > 5
+	then
+		return
 	end
 	
 	if MyHero == nil then return end
-	
+
 	for i = 1, Heroes.Count() do
 		gObject = Heroes.Get(i)
 		
