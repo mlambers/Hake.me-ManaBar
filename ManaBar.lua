@@ -1,14 +1,13 @@
---------------------------------
---- ManaBar.lua Version 0.3c ---
---------------------------------
+-------------------------------
+--- ManaBar.lua Version 0.4 ---
+-------------------------------
 
 local ManaBar = {
 	OptionEnable = Menu.AddOption({"mlambers", "ManaBar"}, "1. Enable.", "Enable/Disable this script."),
 	OffsetWidth = Menu.AddOption({"mlambers", "ManaBar"}, "2. Width", "", 20, 200, 2),
 	OffsetHeight = Menu.AddOption({"mlambers", "ManaBar"}, "3. Height", "", 5, 20, 1),
 	OffsetYPos = Menu.AddOption({"mlambers", "ManaBar"}, "4. Y position", "", -20, 20, 1),
-	OffsetXPos = Menu.AddOption({"mlambers", "ManaBar"}, "5. X position", "", -90, 90, 1),
-	NeedInit = true
+	OffsetXPos = Menu.AddOption({"mlambers", "ManaBar"}, "5. X position", "", -90, 90, 1)
 }
 
 local MyHero = nil
@@ -46,9 +45,8 @@ function ManaBar.OnScriptLoad()
 	oWidth, oHeight, oYPos, oXPos = nil, nil, nil, nil
 	xBox, yBox = nil, nil
 	TopMost, RightMost = nil, nil
-	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4 ] [ GameState : " .. GameRules.GetGameState() .. " ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
@@ -58,9 +56,8 @@ function ManaBar.OnGameEnd()
 	oWidth, oHeight, oYPos, oXPos = nil, nil, nil, nil
 	xBox, yBox = nil, nil
 	TopMost, RightMost = nil, nil
-	ManaBar.NeedInit = true
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4 ] [ GameState : " .. GameRules.GetGameState() .. " ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(tempX, tempY)
@@ -74,7 +71,7 @@ end
 function ManaBar.OnUpdate()
 	if Menu.IsEnabled(ManaBar.OptionEnable) == false then return end
 	
-	if MyHero == nil or MyHero ~= Heroes.GetLocal() or ManaBar.NeedInit then 
+	if MyHero == nil or MyHero ~= Heroes.GetLocal() then 
 		MyHero = Heroes.GetLocal()
 		gObject, gObjectOrigin = nil, nil
 		w2sX, w2sY = nil, nil
@@ -84,9 +81,9 @@ function ManaBar.OnUpdate()
 		oXPos = Menu.GetValue(ManaBar.OffsetXPos)
 		xBox, yBox = nil, nil
 		RightMost, TopMost = Renderer.GetScreenSize()
-		ManaBar.NeedInit = false
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.3c ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4 ] [ GameState : " .. GameRules.GetGameState() .. " ] Game started, init script done.")
+		return
 	end
 end
 
