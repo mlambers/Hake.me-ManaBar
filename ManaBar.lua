@@ -1,5 +1,5 @@
 --------------------------------
---- ManaBar.lua Version 0.4a ---
+--- ManaBar.lua Version 0.4b ---
 --------------------------------
 
 local ManaBar = {
@@ -61,7 +61,7 @@ function ManaBar.OnScriptLoad()
     x_w2s, y_w2s = nil, nil
 	screen_width, screen_height = nil, nil
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4a ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
@@ -75,7 +75,7 @@ function ManaBar.OnGameEnd()
     x_w2s, y_w2s = nil, nil
 	screen_width, screen_height = nil, nil
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4a ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(x_position, y_position)
@@ -102,7 +102,7 @@ function ManaBar.OnUpdate()
         hero_object, hero_origin = nil, nil
         MyHero = Heroes.GetLocal()
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4a ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Game started, init script done.")
 		return
 	end
 end
@@ -124,16 +124,15 @@ function ManaBar.OnDraw()
 			and NPC.IsIllusion(hero_object) == false
 			and Entity.IsPlayer(Entity.GetOwner(hero_object)) 
 		then
+            
 			hero_origin = Entity.GetAbsOrigin(hero_object)
-			x_w2s, y_w2s = Renderer.WorldToScreen(hero_origin)
+            hero_origin:SetZ(hero_origin:GetZ() + NPC.GetHealthBarOffset(hero_object))
+            x_w2s, y_w2s, zz = Renderer.WorldToScreen(hero_origin)
 			
 			--[[
 				Need to check if target object on our screen or not.
 			--]]
 			if ManaBar.IsOnScreen(x_w2s, y_w2s) then
-				hero_origin:SetZ(hero_origin:GetZ() + NPC.GetHealthBarOffset(hero_object))
-				x_w2s, y_w2s = Renderer.WorldToScreen(hero_origin)
-				
 				bar_x = x_w2s + bar_x_offset
 				bar_y = y_w2s + bar_y_offset
 				
