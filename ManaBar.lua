@@ -1,5 +1,5 @@
 --------------------------------
---- ManaBar.lua Version 0.4b ---
+--- ManaBar.lua Version 0.4c ---
 --------------------------------
 
 local ManaBar = {
@@ -25,6 +25,8 @@ local bar_x, bar_y = nil, nil
 
 local x_w2s, y_w2s = nil, nil
 local screen_width, screen_height = nil, nil
+
+local extra_health_bar = -1
 
 
 function ManaBar.OnMenuOptionChange(option, old, new)
@@ -60,8 +62,10 @@ function ManaBar.OnScriptLoad()
     
     x_w2s, y_w2s = nil, nil
 	screen_width, screen_height = nil, nil
+    
+    extra_health_bar = -1
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4c ] Script load.")
 end
 
 function ManaBar.OnGameEnd()
@@ -74,8 +78,10 @@ function ManaBar.OnGameEnd()
     
     x_w2s, y_w2s = nil, nil
 	screen_width, screen_height = nil, nil
+    
+    extra_health_bar = -1
 	
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4c ] Game end. Reset all variable.")
 end
 
 function ManaBar.IsOnScreen(x_position, y_position)
@@ -100,9 +106,11 @@ function ManaBar.OnUpdate()
 		screen_width, screen_height = Renderer.GetScreenSize()
         
         hero_object, hero_origin = nil, nil
+        extra_health_bar = -1
+        
         MyHero = Heroes.GetLocal()
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4b ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ ManaBar.lua ] [ Version 0.4c ] Game started, init script done.")
 		return
 	end
 end
@@ -111,7 +119,7 @@ function ManaBar.OnDraw()
 	if Menu.IsEnabled(ManaBar.OptionEnable) == false then return end
 	
 	if MyHero == nil then return end
-
+    
 	for i = 1, Heroes.Count() do
 		hero_object = Heroes.Get(i)
 		
@@ -126,8 +134,15 @@ function ManaBar.OnDraw()
 		then
             
 			hero_origin = Entity.GetAbsOrigin(hero_object)
-            hero_origin:SetZ(hero_origin:GetZ() + NPC.GetHealthBarOffset(hero_object))
-            x_w2s, y_w2s, zz = Renderer.WorldToScreen(hero_origin)
+            extra_health_bar = Entity.GetField(hero_object, "m_nHealthBarOffsetOverride")
+            
+            if extra_health_bar > -1 then
+                hero_origin:SetZ(hero_origin:GetZ() + extra_health_bar)
+            else
+                hero_origin:SetZ(hero_origin:GetZ() + NPC.GetHealthBarOffset(hero_object))
+            end
+            
+            x_w2s, y_w2s = Renderer.WorldToScreen(hero_origin)
 			
 			--[[
 				Need to check if target object on our screen or not.
